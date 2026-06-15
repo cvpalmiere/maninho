@@ -1,15 +1,14 @@
 /* =============================================
-   NOSSO JARDIM — Diário de Gestação
+   SEU JARDIM — Diário de Gestação
    Lógica completa — localStorage, PDF, Senha
    Para: Mana Mari
-   Versão 2.0 — Planta contínua + Sono + Fotos + Nomes + Peso
+   Versão 2.1 — Corrigida e Funcional
    ============================================= */
 
 // ==============================================
 // CONFIGURAÇÕES
 // ==============================================
 const SENHA_CORRETA = 'ManaMari';
-const NOME_MAE = 'Mana Mari';
 
 // Frases por semana
 const FRASES_SEMANAIS = [
@@ -124,26 +123,6 @@ function carregarDados() {
     return dadosIniciais();
 }
 
-function dadosIniciais() {
-    return {
-        configurado: false,
-        semanaAtual: 1,
-        dataDUM: null,
-        dataDPP: null,
-        desejos: [],
-        cartas: [],
-        marcos: {},
-        frasesSalvas: [],
-        streak: 0,
-        ultimaRegagem: null,
-        primeiraVisita: true,
-        registrosSono: [],
-        fotosBarriga: [],
-        nomesFavoritos: [],
-        registrosPeso: []
-    };
-}
-
 let dados = carregarDados();
 
 function salvarDados() {
@@ -220,84 +199,93 @@ const sonoHistoricoDiv = document.getElementById('sonoHistorico');
 // INICIALIZAÇÃO
 // ==============================================
 function init() {
-    // Verifica autenticação
     const authData = localStorage.getItem('nosso_jardim_auth');
     if (authData) {
-        const auth = JSON.parse(authData);
-        const agora = new Date().getTime();
-        if (agora - auth.timestamp < 30 * 24 * 60 * 60 * 1000) {
-            if (dados.configurado) {
-                mostrarConteudoPrincipal();
-            } else {
-                mostrarTelaConfig();
+        try {
+            const auth = JSON.parse(authData);
+            const agora = new Date().getTime();
+            if (agora - auth.timestamp < 30 * 24 * 60 * 60 * 1000) {
+                if (dados.configurado) {
+                    mostrarConteudoPrincipal();
+                } else {
+                    mostrarTelaConfig();
+                }
+                return;
             }
-            return;
+        } catch(e) {
+            // Auth inválido, continua para tela de senha
         }
     }
     
     telaSenha.classList.remove('esconder');
     
     // Event Listeners
-    btnEntrar.addEventListener('click', verificarSenha);
-    inputSenha.addEventListener('keypress', (e) => { if (e.key === 'Enter') verificarSenha(); });
-    btnPlantar.addEventListener('click', configurarJardim);
-    btnFecharBoasVindas.addEventListener('click', fecharBoasVindas);
+    if (btnEntrar) btnEntrar.addEventListener('click', verificarSenha);
+    if (inputSenha) inputSenha.addEventListener('keypress', (e) => { if (e.key === 'Enter') verificarSenha(); });
+    if (btnPlantar) btnPlantar.addEventListener('click', configurarJardim);
+    if (btnFecharBoasVindas) btnFecharBoasVindas.addEventListener('click', fecharBoasVindas);
     
     document.querySelectorAll('.nav-links button').forEach(btn => {
         btn.addEventListener('click', () => navegarSecao(btn.dataset.secao));
     });
     
-    btnRegar.addEventListener('click', regarPlanta);
+    if (btnRegar) btnRegar.addEventListener('click', regarPlanta);
     visitantes.forEach(v => {
         v.addEventListener('click', () => mostrarFraseVisitante(v.dataset.animal));
     });
     
-    btnNovoDesejo.addEventListener('click', () => abrirModalDesejo());
-    btnModoNoturno.addEventListener('click', abrirModoNoturno);
-    btnNovaCarta.addEventListener('click', () => abrirModalCarta());
+    if (btnNovoDesejo) btnNovoDesejo.addEventListener('click', () => abrirModalDesejo());
+    if (btnModoNoturno) btnModoNoturno.addEventListener('click', abrirModoNoturno);
+    if (btnNovaCarta) btnNovaCarta.addEventListener('click', () => abrirModalCarta());
     
     document.querySelectorAll('#filtrosDesejos button').forEach(btn => {
         btn.addEventListener('click', () => filtrarDesejos(btn.dataset.filtro, btn));
     });
     
-    btnFecharModal.addEventListener('click', fecharModal);
-    modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) fecharModal(); });
+    if (btnFecharModal) btnFecharModal.addEventListener('click', fecharModal);
+    if (modalOverlay) modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) fecharModal(); });
     
-    btnSalvarNoturno.addEventListener('click', salvarDesejoNoturno);
-    btnFecharNoturno.addEventListener('click', fecharModoNoturno);
+    if (btnSalvarNoturno) btnSalvarNoturno.addEventListener('click', salvarDesejoNoturno);
+    if (btnFecharNoturno) btnFecharNoturno.addEventListener('click', fecharModoNoturno);
     
-    btnExportar.addEventListener('click', exportarDados);
-    btnImportar.addEventListener('click', () => inputImportar.click());
-    inputImportar.addEventListener('change', importarDados);
+    if (btnExportar) btnExportar.addEventListener('click', exportarDados);
+    if (btnImportar) btnImportar.addEventListener('click', () => inputImportar.click());
+    if (inputImportar) inputImportar.addEventListener('change', importarDados);
     
     marcosMini.forEach(m => {
         m.addEventListener('click', () => navegarSecao('marcos'));
     });
     
-    fraseDoDia.addEventListener('click', salvarFraseAtual);
+    if (fraseDoDia) fraseDoDia.addEventListener('click', salvarFraseAtual);
     
     // Sono
-    document.getElementById('sonoBem').addEventListener('click', () => registrarSono('bem'));
-    document.getElementById('sonoMal').addEventListener('click', () => registrarSono('mal'));
-    document.getElementById('sonoInsônia').addEventListener('click', () => registrarSono('insonia'));
+    const sonoBem = document.getElementById('sonoBem');
+    const sonoMal = document.getElementById('sonoMal');
+    const sonoInsônia = document.getElementById('sonoInsônia');
+    if (sonoBem) sonoBem.addEventListener('click', () => registrarSono('bem'));
+    if (sonoMal) sonoMal.addEventListener('click', () => registrarSono('mal'));
+    if (sonoInsônia) sonoInsônia.addEventListener('click', () => registrarSono('insonia'));
     
     // Fotos
-    document.getElementById('btnAdicionarFoto').addEventListener('click', () => inputFoto.click());
-    inputFoto.addEventListener('change', adicionarFoto);
+    const btnAdicionarFoto = document.getElementById('btnAdicionarFoto');
+    if (btnAdicionarFoto) btnAdicionarFoto.addEventListener('click', () => inputFoto.click());
+    if (inputFoto) inputFoto.addEventListener('change', adicionarFoto);
     
     // Nomes
-    btnAdicionarNome.addEventListener('click', adicionarNome);
-    inputNovoNome.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarNome(); });
+    if (btnAdicionarNome) btnAdicionarNome.addEventListener('click', adicionarNome);
+    if (inputNovoNome) inputNovoNome.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarNome(); });
     
     // Peso
-    document.getElementById('btnRegistrarPeso').addEventListener('click', () => abrirModalPeso());
+    const btnRegistrarPeso = document.getElementById('btnRegistrarPeso');
+    if (btnRegistrarPeso) btnRegistrarPeso.addEventListener('click', () => abrirModalPeso());
 }
 
 function verificarSenha() {
+    if (!inputSenha) return;
     const senha = inputSenha.value.trim();
     if (senha === SENHA_CORRETA) {
         localStorage.setItem('nosso_jardim_auth', JSON.stringify({ timestamp: new Date().getTime() }));
-        mensagemErro.textContent = '';
+        if (mensagemErro) mensagemErro.textContent = '';
         telaSenha.classList.add('esconder');
         if (dados.configurado) {
             mostrarConteudoPrincipal();
@@ -305,7 +293,7 @@ function verificarSenha() {
             mostrarTelaConfig();
         }
     } else {
-        mensagemErro.textContent = 'Essa não é a chave do jardim... tente de novo.';
+        if (mensagemErro) mensagemErro.textContent = 'Essa não é a chave do jardim... tente de novo.';
         inputSenha.classList.add('tremendo');
         setTimeout(() => inputSenha.classList.remove('tremendo'), 500);
         inputSenha.value = '';
@@ -315,15 +303,17 @@ function verificarSenha() {
 
 function mostrarTelaConfig() {
     telaConfig.classList.add('visivel');
-    const hoje = new Date();
-    const dumSugerida = new Date(hoje);
-    dumSugerida.setDate(dumSugerida.getDate() - 280);
-    inputDUM.value = dumSugerida.toISOString().split('T')[0];
+    if (inputDUM) {
+        const hoje = new Date();
+        const dumSugerida = new Date(hoje);
+        dumSugerida.setDate(dumSugerida.getDate() - 280);
+        inputDUM.value = dumSugerida.toISOString().split('T')[0];
+    }
 }
 
 function configurarJardim() {
-    const semana = parseInt(inputSemanaAtual.value);
-    const dum = inputDUM.value;
+    const semana = parseInt(inputSemanaAtual?.value || '0');
+    const dum = inputDUM?.value || null;
     
     if (!semana || semana < 1 || semana > 42) {
         alert('Por favor, insira um número de semanas válido (1-42).');
@@ -348,18 +338,18 @@ function configurarJardim() {
 }
 
 function mostrarBoasVindas() {
-    telaBoasVindas.classList.add('visivel');
+    if (telaBoasVindas) telaBoasVindas.classList.add('visivel');
 }
 
 function fecharBoasVindas() {
-    telaBoasVindas.classList.remove('visivel');
+    if (telaBoasVindas) telaBoasVindas.classList.remove('visivel');
     dados.primeiraVisita = false;
     salvarDados();
     mostrarConteudoPrincipal();
 }
 
 function mostrarConteudoPrincipal() {
-    conteudoPrincipal.classList.add('visivel');
+    if (conteudoPrincipal) conteudoPrincipal.classList.add('visivel');
     inicializarJardim();
     renderizarTudo();
     criarParticulas();
@@ -373,31 +363,25 @@ function atualizarPlanta() {
     const semana = dados.semanaAtual;
     if (!plantaSVG) return;
     
-    // Tamanho base que cresce gradualmente
-    const alturaTotal = 200 + (semana * 4); // cresce 4px por semana
+    const alturaTotal = 200 + (semana * 4);
     const alturaCaule = Math.min(alturaTotal, 350);
     
     let svgContent = '';
     
-    // Vaso (tamanho fixo)
     svgContent += `<rect x="70" y="${alturaCaule - 20}" width="60" height="55" rx="8" fill="#C4A8D6" stroke="#9B72B5" stroke-width="2"/>`;
     svgContent += `<rect x="62" y="${alturaCaule - 25}" width="76" height="10" rx="5" fill="#D4B872"/>`;
     
     if (semana <= 2) {
-        // Sementinha na terra
         svgContent += `<ellipse cx="100" cy="${alturaCaule - 18}" rx="6" ry="4" fill="#8B6914"/>`;
         svgContent += `<text x="100" y="${alturaCaule - 40}" text-anchor="middle" font-size="10" fill="#6B5A7A">Sementinha plantada</text>`;
     } else if (semana <= 4) {
-        // Broto saindo
         svgContent += `<line x1="100" y1="${alturaCaule - 18}" x2="100" y2="${alturaCaule - 50}" stroke="#7BAE7F" stroke-width="3" stroke-linecap="round"/>`;
         svgContent += `<ellipse cx="92" cy="${alturaCaule - 48}" rx="8" ry="5" fill="#8CB89C" transform="rotate(-15 92 ${alturaCaule - 48})"/>`;
         svgContent += `<ellipse cx="108" cy="${alturaCaule - 52}" rx="8" ry="5" fill="#8CB89C" transform="rotate(15 108 ${alturaCaule - 52})"/>`;
     } else {
-        // Caule principal
         const grossuraCaule = Math.min(2 + semana * 0.15, 6);
         svgContent += `<line x1="100" y1="${alturaCaule - 20}" x2="100" y2="40" stroke="#6A9A7A" stroke-width="${grossuraCaule}" stroke-linecap="round"/>`;
         
-        // Folhas (sempre presentes, aumentando em quantidade)
         const numFolhas = Math.min(2 + Math.floor(semana / 3), 14);
         for (let i = 0; i < numFolhas; i++) {
             const y = alturaCaule - 40 - (i * 22);
@@ -408,7 +392,6 @@ function atualizarPlanta() {
             svgContent += `<ellipse cx="${x}" cy="${y}" rx="${tamanho}" ry="${tamanho * 0.5}" fill="#8CB89C" transform="rotate(${rotacao} ${x} ${y})"/>`;
         }
         
-        // Flores (a partir da semana 15)
         if (semana >= 15) {
             const numFlores = Math.min(1 + Math.floor((semana - 15) / 4), 5);
             for (let i = 0; i < numFlores; i++) {
@@ -424,7 +407,6 @@ function atualizarPlanta() {
             }
         }
         
-        // Fruto (a partir da semana 30)
         if (semana >= 30) {
             const tamanhoFruto = 8 + (semana - 30) * 2;
             svgContent += `<ellipse cx="100" cy="${30 - (semana - 30)}" rx="${tamanhoFruto}" ry="${tamanhoFruto * 1.2}" fill="#D4B872" opacity="0.8"/>`;
@@ -493,7 +475,6 @@ function criarGotinhas() {
     for (let i = 0; i < 6; i++) {
         setTimeout(() => {
             const gota = document.createElement('div');
-            gota.className = 'particula';
             gota.style.cssText = `
                 background: #9B72B5; width: 5px; height: 8px; border-radius: 50%;
                 position: fixed; top: 38%; left: ${46 + Math.random() * 8}%;
@@ -646,7 +627,7 @@ function abrirModalDesejo(desejoExistente = null) {
         <div class="form-grupo"><label>Onde estava? (opcional)</label><input type="text" id="inputDesejoLocal" value="${desejoExistente?desejoExistente.local||'':''}"></div>
         <div class="form-grupo"><label>Notas</label><textarea id="inputDesejoNotas">${desejoExistente?desejoExistente.notas||'':''}</textarea></div>
         <button class="btn btn-primario" id="btnSalvarDesejo">Salvar</button>
-        ${desejoExistente?'<button class="btn btn-perigo" style="margin-top:8px;background:#c0392b;color:white;" id="btnExcluirDesejo">Excluir</button>':''}
+        ${desejoExistente?'<button class="btn" style="margin-top:8px;background:#c0392b;color:white;" id="btnExcluirDesejo">Excluir</button>':''}
     `;
     
     abrirModal(html);
@@ -678,7 +659,7 @@ function abrirModalDesejo(desejoExistente = null) {
     
     if(desejoExistente){
         document.getElementById('btnExcluirDesejo').addEventListener('click',()=>{
-            if(confirm('Excluir?')){dados.desejos=dados.desejos.filter(d=>d.id!==desejoExistente.id);salvarDados();fecharModal();renderizarDesejos();}
+            if(confirm('Excluir este desejo?')){dados.desejos=dados.desejos.filter(d=>d.id!==desejoExistente.id);salvarDados();fecharModal();renderizarDesejos();}
         });
     }
 }
@@ -721,10 +702,10 @@ function iconeCategoria(cat){
 // ==============================================
 // MODO NOTURNO
 // ==============================================
-function abrirModoNoturno(){modoNoturnoOverlay.classList.add('visivel');inputDesejoNoturno.focus();}
-function fecharModoNoturno(){modoNoturnoOverlay.classList.remove('visivel');inputDesejoNoturno.value='';}
+function abrirModoNoturno(){if(modoNoturnoOverlay)modoNoturnoOverlay.classList.add('visivel');if(inputDesejoNoturno)inputDesejoNoturno.focus();}
+function fecharModoNoturno(){if(modoNoturnoOverlay)modoNoturnoOverlay.classList.remove('visivel');if(inputDesejoNoturno)inputDesejoNoturno.value='';}
 function salvarDesejoNoturno(){
-    const t=inputDesejoNoturno.value.trim();if(!t)return;
+    const t=inputDesejoNoturno?inputDesejoNoturno.value.trim():'';if(!t)return;
     dados.desejos.push({id:Date.now(),texto:t,data:new Date().toISOString().slice(0,16),intensidade:5,categoria:'outro',realizado:false,local:'',notas:'Registrado de madrugada'});
     salvarDados();fecharModoNoturno();renderizarDesejos();
 }
@@ -750,7 +731,7 @@ function abrirModalCarta(cartaExistente=null){
         if(cartaExistente){const i=dados.cartas.findIndex(c=>c.id===cartaExistente.id);dados.cartas[i]=carta;}else dados.cartas.push(carta);
         salvarDados();fecharModal();renderizarCartas();
     });
-    if(cartaExistente)document.getElementById('btnExcluirCarta').addEventListener('click',()=>{if(confirm('Excluir?')){dados.cartas=dados.cartas.filter(c=>c.id!==cartaExistente.id);salvarDados();fecharModal();renderizarCartas();}});
+    if(cartaExistente)document.getElementById('btnExcluirCarta').addEventListener('click',()=>{if(confirm('Excluir esta carta?')){dados.cartas=dados.cartas.filter(c=>c.id!==cartaExistente.id);salvarDados();fecharModal();renderizarCartas();}});
 }
 
 function renderizarCartas(){
@@ -811,12 +792,10 @@ function renderizarMarcos(){
 
 function toggleMarco(marcoId){
     if(dados.marcos[marcoId]){
-        // Já existe, pergunta se quer remover ou alterar data
         const novaData = prompt('Alterar data (AAAA-MM-DD) ou cancelar para remover:', dados.marcos[marcoId]);
         if(novaData===null){delete dados.marcos[marcoId];}
         else if(novaData.trim()){dados.marcos[marcoId]=novaData.trim();}
     } else {
-        // Novo marco
         const dataSugerida = new Date().toISOString().split('T')[0];
         const data = prompt('Quando isso aconteceu? (AAAA-MM-DD)', dataSugerida);
         if(data&&data.trim()){dados.marcos[marcoId]=data.trim();}
@@ -860,7 +839,6 @@ function renderizarGraficoSono(){
     const labels=ultimos7.map(s=>s.data.slice(5));
     const valores=ultimos7.map(s=>s.tipo==='bem'?3:s.tipo==='mal'?2:1);
     
-    // Desenho simples
     ctx.clearRect(0,0,graficoSonoCanvas.width,graficoSonoCanvas.height);
     if(valores.length===0){ctx.fillStyle='#6B5A7A';ctx.fillText('Sem dados ainda',10,20);return;}
     
@@ -911,15 +889,15 @@ function renderizarFotos(){
 // NOMES
 // ==============================================
 function adicionarNome(){
-    const nome=inputNovoNome.value.trim();
+    const nome=inputNovoNome?inputNovoNome.value.trim():'';
     if(!nome)return;
     if(dados.nomesFavoritos.find(n=>n.nome.toLowerCase()===nome.toLowerCase())){alert('Esse nome já está na lista!');return;}
-    dados.nomesFavoritos.push({nome:votos:0});
-    salvarDados();renderizarNomes();inputNovoNome.value='';
+    dados.nomesFavoritos.push({nome: nome, votos: 0});
+    salvarDados();renderizarNomes();if(inputNovoNome)inputNovoNome.value='';
 }
 
 function votarNome(index){
-    dados.nomesFavoritos[index].votos++;
+    if(dados.nomesFavoritos[index]) dados.nomesFavoritos[index].votos++;
     salvarDados();renderizarNomes();
 }
 
@@ -934,7 +912,7 @@ function renderizarNomes(){
     if(!listaNomes)return;
     if(dados.nomesFavoritos.length===0){listaNomes.innerHTML='<p style="text-align:center;color:var(--texto-claro);padding:20px;">Nenhum nome na lista ainda.</p>';return;}
     const ordenados=[...dados.nomesFavoritos].sort((a,b)=>b.votos-a.votos);
-    listaNomes.innerHTML=ordenados.map((n,i)=>{
+    listaNomes.innerHTML=ordenados.map((n)=>{
         const idx=dados.nomesFavoritos.indexOf(n);
         return `
         <div class="nome-item">
@@ -979,15 +957,20 @@ function abrirModalPeso(pesoExistente=null){
         salvarDados();fecharModal();renderizarTabelaPeso();renderizarGraficoPeso();
     });
     if(pesoExistente)document.getElementById('btnExcluirPeso').addEventListener('click',()=>{
-        if(confirm('Excluir?')){dados.registrosPeso=dados.registrosPeso.filter(p=>p.id!==pesoExistente.id);salvarDados();fecharModal();renderizarTabelaPeso();renderizarGraficoPeso();}
+        if(confirm('Excluir este registro?')){dados.registrosPeso=dados.registrosPeso.filter(p=>p.id!==pesoExistente.id);salvarDados();fecharModal();renderizarTabelaPeso();renderizarGraficoPeso();}
     });
+}
+
+function abrirModalPesoPorId(id) {
+    const peso = dados.registrosPeso.find(p => p.id === id);
+    if (peso) abrirModalPeso(peso);
 }
 
 function renderizarTabelaPeso(){
     if(!tabelaPeso)return;
     if(dados.registrosPeso.length===0){tabelaPeso.innerHTML='<p style="text-align:center;color:var(--texto-claro);padding:20px;">Nenhum registro ainda.</p>';return;}
     tabelaPeso.innerHTML=dados.registrosPeso.map(p=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--branco);border-radius:8px;margin-bottom:4px;cursor:pointer;" onclick="abrirModalPeso(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--branco);border-radius:8px;margin-bottom:4px;cursor:pointer;" onclick="abrirModalPesoPorId(${p.id})">
             <span>Semana ${p.semana}</span>
             <span style="font-weight:600;">${p.peso}g</span>
             <span style="font-size:0.7rem;color:var(--texto-claro);">${formatarData(p.data)}</span>
@@ -1007,12 +990,10 @@ function renderizarGraficoPeso(){
     const maxPeso=Math.max(...pesos)*1.1;
     const range=maxPeso-minPeso||1;
     
-    // Linhas de grade
     ctx.strokeStyle='#E8D5F0';
     ctx.lineWidth=1;
     for(let i=0;i<=4;i++){ctx.beginPath();ctx.moveTo(40,h-30-i*(h-60)/4);ctx.lineTo(w-20,h-30-i*(h-60)/4);ctx.stroke();}
     
-    // Pontos e linha
     ctx.strokeStyle='#9B72B5';
     ctx.lineWidth=2;
     ctx.beginPath();
@@ -1023,7 +1004,6 @@ function renderizarGraficoPeso(){
     });
     ctx.stroke();
     
-    // Pontos
     dados.registrosPeso.forEach((p,i)=>{
         const x=40+(i/(dados.registrosPeso.length-1||1))*(w-60);
         const y=h-30-((p.peso-minPeso)/range)*(h-60);
@@ -1048,8 +1028,8 @@ function renderizarPote(){
 // FRASES SALVAS
 // ==============================================
 function salvarFraseAtual(){
-    const frase=fraseDoDia.textContent;
-    if(!dados.frasesSalvas.includes(frase)){
+    const frase=fraseDoDia?fraseDoDia.textContent:'';
+    if(frase && !dados.frasesSalvas.includes(frase)){
         dados.frasesSalvas.push(frase);
         salvarDados();
         mostrarFraseFlutuante('Frase salva!');
@@ -1112,8 +1092,8 @@ function importarDados(event){
 // ==============================================
 // MODAL
 // ==============================================
-function abrirModal(conteudo){modalConteudo.innerHTML=conteudo;modalOverlay.style.display='flex';}
-function fecharModal(){modalOverlay.style.display='none';modalConteudo.innerHTML='';}
+function abrirModal(conteudo){if(modalConteudo)modalConteudo.innerHTML=conteudo;if(modalOverlay)modalOverlay.style.display='flex';}
+function fecharModal(){if(modalOverlay)modalOverlay.style.display='none';if(modalConteudo)modalConteudo.innerHTML='';}
 
 // ==============================================
 // UTILITÁRIOS
@@ -1121,6 +1101,7 @@ function fecharModal(){modalOverlay.style.display='none';modalConteudo.innerHTML
 function formatarData(dataStr){
     if(!dataStr)return'';
     const data=new Date(dataStr);
+    if(isNaN(data.getTime()))return dataStr;
     return data.toLocaleDateString('pt-BR',{day:'numeric',month:'short',year:'numeric'});
 }
 
