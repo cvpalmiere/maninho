@@ -775,7 +775,7 @@ function renderizarMarcos(){
         {id:'primeira_eco',label:'Primeira ecografia'},
         {id:'descobriu_sexo',label:'Descobriu o sexo'},
         {id:'primeiro_chute',label:'Primeiro chute'},
-        {id:'parceiro_sentiu',label:'Parceiro(a) sentiu'},
+        {id:'parceiro_sentiu',label:'Arthur sentiu o primeiro chute'},
         {id:'cha_bebe',label:'Chá de bebê'},
         {id:'quartinho',label:'Quartinho montado'},
         {id:'mala_maternidade',label:'Mala maternidade'}
