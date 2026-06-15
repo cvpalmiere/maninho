@@ -92,6 +92,26 @@ const FRASES_MARCOS = {
 // ==============================================
 const STORAGE_KEY = 'nosso_jardim_dados';
 
+function dadosIniciais() {
+    return {
+        configurado: false,
+        semanaAtual: 1,
+        dataDUM: null,
+        dataDPP: null,
+        desejos: [],
+        cartas: [],
+        marcos: {},
+        frasesSalvas: [],
+        streak: 0,
+        ultimaRegagem: null,
+        primeiraVisita: true,
+        registrosSono: [],
+        fotosBarriga: [],
+        nomesFavoritos: [],
+        registrosPeso: []
+    };
+}
+
 function carregarDados() {
     const dadosSalvos = localStorage.getItem(STORAGE_KEY);
     if (dadosSalvos) {
