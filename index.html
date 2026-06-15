@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Jardim</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- =============================================
+    TELA DE SENHA
+    ============================================= -->
+    <div class="tela-senha" id="telaSenha">
+        <div class="container-senha">
+            <!-- Silhueta da planta -->
+            <div class="silhueta-planta">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="35" y="75" width="30" height="25" rx="4" fill="#C4A8D6" stroke="#9B72B5" stroke-width="1.5"/>
+                    <rect x="30" y="72" width="40" height="6" rx="3" fill="#D4B872"/>
+                    <line x1="50" y1="72" x2="50" y2="25" stroke="#6A9A7A" stroke-width="2.5" stroke-linecap="round"/>
+                    <ellipse cx="38" cy="45" rx="12" ry="6" fill="#8CB89C" transform="rotate(-25 38 45)"/>
+                    <ellipse cx="62" cy="35" rx="12" ry="6" fill="#8CB89C" transform="rotate(25 62 35)"/>
+                    <circle cx="50" cy="22" r="8" fill="#E8D5F0" stroke="#C4A8D6" stroke-width="1.5"/>
+                </svg>
+            </div>
+            
+            <!-- Cadeado -->
+            <div class="cadeado-icone">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    <circle cx="12" cy="16" r="1"/>
+                </svg>
+            </div>
+            
+            <h1>Nosso Jardim</h1>
+            <p class="subtitulo">Um lugar secreto para cultivar memórias</p>
+            
+            <div class="grupo-input">
+                <input type="password" id="inputSenha" placeholder="Digite a senha" autocomplete="off">
+            </div>
+            <button class="btn-entrar" id="btnEntrar">Entrar no Jardim</button>
+            <p class="mensagem-erro" id="mensagemErro"></p>
+        </div>
+    </div>
+
+    <!-- =============================================
+    TELA DE CONFIGURAÇÃO INICIAL
+    ============================================= -->
+    <div class="tela-config" id="telaConfig">
+        <div class="container-config">
+            <h2>Vamos plantar seu jardim</h2>
+            <p class="subtitulo-config">Preciso de algumas informações para começar</p>
+            
+            <div class="config-grupo">
+                <label>Quantas semanas de gestação você está agora?</label>
+                <input type="number" id="inputSemanaAtual" placeholder="Ex: 12" min="1" max="42">
+            </div>
+            <div class="config-grupo">
+                <label>Data da última menstruação (opcional)</label>
+                <input type="date" id="inputDUM">
+            </div>
+            <button class="btn-plantar" id="btnPlantar">Plantar meu jardim</button>
+        </div>
+    </div>
+
+    <!-- =============================================
+    TELA DE BOAS-VINDAS
+    ============================================= -->
+    <div class="tela-boasvindas" id="telaBoasVindas">
+        <div class="container-boasvindas">
+            <p><strong>Mana Mari,</strong></p>
+            <p>Eu não tenho ideia do que grávidas fazem nem do que registram. Como são seus pensamentinhos? Confesso que desde ontem eu não parei de pesquisar coisas de bebês, quais os melhores tecidos, o que fazer com uma irmã grávida, melhores músicas de Mozart pro bebê virar um gênio. Então, depois de uma noite de muita busca, fiz esse site.</p>
+            <p>Basicamente ele faz isso:</p>
+            <p>
+                - Você pode anotar seus desejos estranhos (com data, intensidade e categoria)<br>
+                - Escrever cartas pro Mariano Júnior<br>
+                - Marcar os momentos importantes da gestação<br>
+                - Ver a linha do tempo com as 40 semanas<br>
+                - Gerar um PDF lindo com tudo que você registrou (gráficos, desejos, cartas)
+            </p>
+            <p>Ah, e tem uma plantinha que vai crescendo conforme o maninho cresce.</p>
+            <p>Eu não consigo acessar nada do que você registra. Fica tudo salvo só no seu celular. É seu.</p>
+            <p class="assinatura">Amo você, Mana Mari.</p>
+            <button class="btn-fechar-boasvindas" id="btnFecharBoasVindas">Entrar no Jardim</button>
+        </div>
+    </div>
+
+    <!-- =============================================
+    CONTEÚDO PRINCIPAL
+    ============================================= -->
+    <div class="conteudo-principal" id="conteudoPrincipal">
+        
+        <!-- Partículas de fundo -->
+        <div class="particulas-container" id="particulasContainer"></div>
+        
+        <!-- Header / Navegação -->
+        <header class="header">
+            <div class="logo">
+                <svg class="icone-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2C8 2 4 6 4 10c0 5 8 12 8 12s8-7 8-12c0-4-4-8-8-8z"/>
+                    <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+                Nosso Jardim
+            </div>
+            <nav class="nav-links">
+                <button data-secao="jardim" class="ativo">Jardim</button>
+                <button data-secao="desejos">Desejos</button>
+                <button data-secao="cartas">Cartas</button>
+                <button data-secao="timeline">Linha do Tempo</button>
+                <button data-secao="marcos">Marcos</button>
+                <button data-secao="pote">Pote</button>
+                <button data-secao="frases">Frases</button>
+            </nav>
+        </header>
+
+        <!-- SEÇÃO: JARDIM -->
+        <section class="secao ativa" id="secao-jardim">
+            <div class="jardim-container">
+                <!-- Céu -->
+                <div class="ceu-jardim" id="ceuJardim"></div>
+                
+                <!-- Indicador de semana -->
+                <div class="semana-indicador" id="semanaIndicador">Carregando...</div>
+                <div class="dias-restantes" id="diasRestantes"></div>
+                
+                <!-- Planta -->
+                <div class="planta-wrapper" id="plantaWrapper">
+                    <svg id="plantaSVG" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Preenchido pelo JavaScript -->
+                    </svg>
+                </div>
+                
+                <!-- Regador -->
+                <div>
+                    <button class="regador-btn" id="btnRegar">
+                        <svg class="icone-regador" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 7v4a5 5 0 0 0 5 5h3"/>
+                            <path d="M13 16h3a5 5 0 0 0 5-5V7"/>
+                            <path d="M8 3v4"/>
+                            <path d="M16 3v4"/>
+                            <path d="M3 11h18"/>
+                            <line x1="8" y1="16" x2="8" y2="21"/>
+                            <line x1="16" y1="16" x2="16" y2="21"/>
+                        </svg>
+                        Regar o jardim
+                    </button>
+                    <div class="streak-info" id="streakInfo">Dias regando: <span class="dias-streak">0</span> seguidos</div>
+                </div>
+                
+                <!-- Frase do dia -->
+                <div class="frase-do-dia" id="fraseDoDia">
+                    Carregando mensagem do dia...
+                </div>
+                
+                <!-- Visitantes do jardim -->
+                <div class="visitantes-jardim">
+                    <div class="visitante" data-animal="joaninha" data-semana-min="10" style="display:none;" title="Joaninha">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#E87461" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="8"/>
+                            <line x1="12" y1="4" x2="12" y2="20"/>
+                            <circle cx="8" cy="9" r="2" fill="#E87461"/>
+                            <circle cx="16" cy="9" r="2" fill="#E87461"/>
+                            <circle cx="9" cy="16" r="1.5" fill="#E87461"/>
+                            <circle cx="15" cy="16" r="1.5" fill="#E87461"/>
+                            <circle cx="12" cy="14" r="1.5" fill="#E87461"/>
+                        </svg>
+                    </div>
+                    <div class="visitante" data-animal="borboleta" data-semana-min="18" style="display:none;" title="Borboleta">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#9B72B5" stroke-width="1.5">
+                            <ellipse cx="12" cy="12" rx="2" ry="4"/>
+                            <path d="M8 8C5 4 2 5 4 10c1-1 3-2 4-2z"/>
+                            <path d="M16 8c3-4 6-3 4 2-1-1-3-2-4-2z"/>
+                            <path d="M8 16c-3 4-6 3-4-2 1 1 3 2 4 2z"/>
+                            <path d="M16 16c3 4 6 3 4-2-1 1-3 2-4 2z"/>
+                        </svg>
+                    </div>
+                    <div class="visitante" data-animal="beijaflor" data-semana-min="24" style="display:none;" title="Beija-flor">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#5B8C5A" stroke-width="1.5">
+                            <ellipse cx="10" cy="10" rx="4" ry="5"/>
+                            <circle cx="8" cy="8" r="1.5" fill="#5B8C5A"/>
+                            <path d="M14 10l8-3-2 6z"/>
+                            <path d="M6 15l-2 6 5-2z"/>
+                        </svg>
+                    </div>
+                    <div class="visitante" data-animal="coelhinho" data-semana-min="30" style="display:none;" title="Coelhinho">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#D4B872" stroke-width="1.5">
+                            <ellipse cx="12" cy="14" rx="6" ry="7"/>
+                            <circle cx="10" cy="10" r="2.5" fill="#D4B872"/>
+                            <circle cx="14" cy="10" r="2.5" fill="#D4B872"/>
+                            <ellipse cx="10" cy="8" rx="1" ry="1.5" fill="#D4B872"/>
+                            <ellipse cx="14" cy="8" rx="1" ry="1.5" fill="#D4B872"/>
+                            <circle cx="12" cy="15" r="1.5" fill="#E8D5F0"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Marcos mini -->
+                <div class="marcos-mini">
+                    <div class="marco-mini" data-marco="teste_positivo" title="Teste positivo">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <div class="marco-mini" data-marco="primeira_eco" title="Primeira ecografia">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    </div>
+                    <div class="marco-mini" data-marco="primeiro_chute" title="Primeiro chute">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12c0-4.41-3.59-8-8-8s-8 3.59-8 8 3.59 8 8 8 8-3.59 8-8z"/></svg>
+                    </div>
+                    <div class="marco-mini" data-marco="cha_bebe" title="Chá de bebê">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-4V3H8v4H4v14h16V7z"/></svg>
+                    </div>
+                    <div class="marco-mini" data-marco="quartinho" title="Quartinho montado">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: DESEJOS -->
+        <section class="secao" id="secao-desejos">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <h2 style="color:var(--lilas-profundo);font-family:'Playfair Display',serif;">Diário de Desejos Estranhos</h2>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-primario" id="btnNovoDesejo">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Novo Desejo
+                    </button>
+                    <button class="btn btn-secundario" id="btnModoNoturno" title="Modo Noturno">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="filtros" id="filtrosDesejos">
+                <button data-filtro="todos" class="ativo">Todos</button>
+                <button data-filtro="realizados">Realizados</button>
+                <button data-filtro="pendentes">Sonhando...</button>
+                <button data-filtro="intensos">Mais intensos</button>
+            </div>
+            
+            <div class="grid-desejos" id="gridDesejos">
+                <p style="text-align:center;color:var(--texto-claro);padding:40px;">Carregando desejos...</p>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: CARTAS -->
+        <section class="secao" id="secao-cartas">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <h2 style="color:var(--lilas-profundo);font-family:'Playfair Display',serif;">Cartas para o Bebê</h2>
+                <button class="btn btn-primario" id="btnNovaCarta">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Nova Carta
+                </button>
+            </div>
+            <div class="grid-cartas" id="gridCartas">
+                <p style="text-align:center;color:var(--texto-claro);padding:40px;">Carregando cartas...</p>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: LINHA DO TEMPO -->
+        <section class="secao" id="secao-timeline">
+            <h2 style="color:var(--lilas-profundo);font-family:'Playfair Display',serif;margin-bottom:8px;">Linha do Tempo</h2>
+            <p style="color:var(--texto-claro);margin-bottom:16px;">Clique em cada semana para ver uma mensagem especial.</p>
+            <div class="linha-tempo-wrapper">
+                <div class="linha-tempo" id="linhaTempo"></div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: MARCOS -->
+        <section class="secao" id="secao-marcos">
+            <h2 style="color:var(--lilas-profundo);font-family:'Playfair Display',serif;margin-bottom:16px;">Marcos da Gestação</h2>
+            <p style="color:var(--texto-claro);margin-bottom:16px;">Clique para marcar cada momento especial.</p>
+            <div id="marcosChecklist"></div>
+        </section>
+
+        <!-- SEÇÃO: POTE DOS DESEJOS -->
+        <section class="secao" id="secao-pote">
+            <div class="pote-container">
+                <h2 style="color:var(--lilas-profundo);font-family:'Playfair Display',serif;">Pote dos Desejos Realizados</h2>
+                <p style="color:var(--texto-claro);margin-bottom:24px;">Cada desejo realizado vira uma estrelinha no pote.</p>
+                <div class="pote-vidro">
+                    <svg viewBox="0 0 150 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="35" y="30" width="80" height="140" rx="20" fill="#E8D5F0" stroke="#C4A8D6" stroke-width="3" opacity="0.8"/>
+                        <rect x="30" y="25" width="90" height="15" rx="7" fill="#9B72B5"/>
+                        <rect x="40" y="20" width="70" height="10" rx="5" fill="#7B4B9A"/>
+                    </svg>
+                    <div class="estrelinhas-pote" id="poteEstrelinhas"></div>
+                </div>
+                <p style="margin-top:16px;font-weight:600;color:var(--lilas-profundo);" id="contadorPote">0 desejos realizados</p>
+            </div>
+        </section>
+
+        <!-- SEÇÃO: FRASES SALVAS -->
+        <section class="secao" id="secao-frases">
+            <h2 style="color:var(--lilas-profundo);font-family:'Playfair Display',serif;margin-bottom:8px;">Frases Guardadas</h2>
+            <p style="color:var(--texto-claro);margin-bottom:16px;">Aqui estão as frases que tocaram seu coração.</p>
+            <div class="frases-salvas-lista" id="frasesSalvasLista"></div>
+            
+            <div style="margin-top:24px;border-top:1px solid var(--lavanda);padding-top:20px;">
+                <h3 style="color:var(--lilas-profundo);margin-bottom:12px;">Gerar Relatórios em PDF</h3>
+                <div class="acoes-dados">
+                    <button class="btn btn-dourado" onclick="gerarPDFDesejos()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        PDF dos Desejos
+                    </button>
+                    <button class="btn btn-dourado" onclick="gerarPDFCartas()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        PDF das Cartas
+                    </button>
+                </div>
+            </div>
+            
+            <div style="margin-top:24px;border-top:1px solid var(--lavanda);padding-top:20px;">
+                <h3 style="color:var(--lilas-profundo);margin-bottom:12px;">Backup das Memórias</h3>
+                <div class="acoes-dados">
+                    <button class="btn btn-secundario" id="btnExportar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Exportar Dados
+                    </button>
+                    <button class="btn btn-secundario" id="btnImportar" onclick="document.getElementById('inputImportar').click()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        Importar Dados
+                    </button>
+                    <input type="file" id="inputImportar" accept=".json" style="display:none;">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- =============================================
+    MODO NOTURNO
+    ============================================= -->
+    <div class="modo-noturno-overlay" id="modoNoturnoOverlay">
+        <button class="btn-fechar-noturno" id="btnFecharNoturno" title="Fechar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="card-noturno">
+            <h2>Desejo Noturno</h2>
+            <p style="font-size:0.85rem;opacity:0.7;">Anote rápido e volte a dormir</p>
+            <input type="text" id="inputDesejoNoturno" placeholder="O que você está desejando agora?">
+            <button class="btn-salvar-noturno" id="btnSalvarNoturno">SALVAR</button>
+        </div>
+    </div>
+
+    <!-- =============================================
+    MODAL
+    ============================================= -->
+    <div class="modal-overlay" id="modalOverlay" style="display:none;">
+        <div class="modal" id="modal">
+            <button class="fechar-modal" id="btnFecharModal" title="Fechar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div id="modalConteudo"></div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="script.js"></script>
+</body>
+</html>
